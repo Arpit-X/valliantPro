@@ -1,0 +1,15 @@
+1. To create a user profile
+
+{
+    "user": {
+        "username": "",
+        "email": ""
+    },
+    "phone": null,
+    "college": "",
+    "isCoordinator": false,
+    "isFaculty": false
+}
+
+curl command : 
+curl -H 'Authorization:Basic YXJwaXQ6dGVzdDEyMzQ=' --header "Content-Type:application/json" --request POST --data '{"user":{"username":"Abhinav","email":"abhinav.dayal@vishnu.edu.in","password":"dashrath"},"phone":"+919494321387","college":"VIT","isCoordinator":true,"isFaculty":true}' http://localhost:8000/events/userprofile/api/all
