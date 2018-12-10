@@ -5,7 +5,7 @@ from django.contrib.auth.validators import UnicodeUsernameValidator
 class UserSerialiser(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ["username",'email',"password"]
+        fields = ["username",'email','password']
         extra_kwargs = {
             'username': {
                 'validators': [UnicodeUsernameValidator()],
@@ -42,8 +42,8 @@ class ProfileSerializer(serializers.ModelSerializer):
         return instance
 
 class EventSerialiser(serializers.ModelSerializer):
-    faculty = UserSerialiser()
-    studentCoordinator = UserSerialiser()
+    facultyCoordinator = ProfileSerializer()
+    studentCoordinator = ProfileSerializer()
     class Meta:
         model = Events
         fields = '__all__'

@@ -17,3 +17,10 @@ class UserProfilesCRUD(generics.RetrieveUpdateDestroyAPIView):
 class AllEvents(generics.ListAPIView):
     queryset = Events.objects.all()
     serializer_class = EventSerialiser
+
+class DepartmentWiseEvent(generics.ListAPIView):
+    serializer_class = EventSerialiser
+    def get_queryset(self):
+        queryset = Events.objects.filter(department=self.kwargs['slug'])
+        queryset =self.get_serializer_class().setup_eager_loading(queryset=queryset)
+        return queryset
