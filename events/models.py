@@ -24,9 +24,10 @@ class Location(models.Model):
 
 class Events(models.Model):
     name = models.CharField(max_length=20, default="")
+    eventCode = models.CharField(max_length=10,default="CSCC")
     facultyCoordinator = models.ForeignKey(UserProfile,on_delete=models.CASCADE, related_name="facultyCord")
     studentCoordinator = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name="studentCord")
-    location = models.OneToOneField(Location, on_delete=models.CASCADE)
+    location = models.ForeignKey(Location, on_delete=models.CASCADE)
     totalPraticipants = models.IntegerField()
     isSpot = models.BooleanField(default=True)
     department = models.CharField(max_length=5,default="CSE")
@@ -34,6 +35,7 @@ class Events(models.Model):
         return self.name
 
 class Participations(models.Model):
-    participant = models.ForeignKey(User, on_delete=models.CASCADE)
+    participant = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     event = models.ForeignKey(Events, on_delete=models.CASCADE)
     registeredOn = models.DateTimeField(auto_now_add=True)
+

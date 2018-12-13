@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'events',
     'rest_framework',
-    'phonenumber_field'
+    'phonenumber_field',
+    'rest_framework.authtoken'
 ]
 
 MIDDLEWARE = [
@@ -47,8 +48,8 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
@@ -105,7 +106,11 @@ AUTH_PASSWORD_VALIDATORS = [
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.DjangoModelPermissions',
-    )
+        # 'rest_framework.permissions.IsAuthenticated'
+     ),
+    # 'DEFAULT_AUTHENTICATION_CLASSES':(
+    #     'rest_framework.authentication.TokenAuthentication',
+    # )
 }
 
 # Internationalization
@@ -126,3 +131,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+    '/var/www/static/',
+]

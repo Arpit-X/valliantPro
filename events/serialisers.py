@@ -1,4 +1,4 @@
-from .models import UserProfile, User, Events
+from .models import UserProfile, User, Events, Participations
 from rest_framework import serializers
 from django.contrib.auth.validators import UnicodeUsernameValidator
 
@@ -47,4 +47,12 @@ class EventSerialiser(serializers.ModelSerializer):
     class Meta:
         model = Events
         fields = '__all__'
+
+class ParticipationSerialiser(serializers.ModelSerializer):
+    participant = ProfileSerializer()
+    event  = EventSerialiser()
+    class Meta:
+        model = Participations
+        fields = "__all__"
+
 
