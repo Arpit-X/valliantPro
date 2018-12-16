@@ -9,6 +9,7 @@ from rest_framework.decorators import permission_classes
 class AllUserProfiles(generics.ListCreateAPIView):
     queryset = UserProfile.objects.all()
     serializer_class = ProfileSerializer
+    permission_classes =[permissions.AllowAny,]
 
 
 class UserProfilesCRUD(generics.RetrieveUpdateDestroyAPIView):
@@ -25,8 +26,26 @@ class DepartmentWiseEvent(generics.ListAPIView):
         queryset = Events.objects.filter(department=self.kwargs['slug'])
         queryset =self.get_serializer_class().setup_eager_loading(queryset=queryset)
         return queryset
-@permission_classes((permissions.AllowAny,))
+
+class IsCoordinator(permissions.BasePermission):
+    def has_permission(self,request,view):
+        event = Events.objects.get(eventCode=view.kwargs.get('slug',None))
+        user = UserProfile.objects.get(user=request.user)
+        return user == event.studentCoordinator or user == event.facultyCoordinator
+
+class UserDetails(APIView):
+    queryset = Events.objects.filter(name="Code Champions")
+    def get(self,request,*args,**kwargs):
+        try:
+            profile = UserProfile.objects.get(user__username=self.kwargs['slug'])
+        except:
+            profile = None
+        profile = ProfileSerializer(profile)
+        return Response(profile.data)
+
 class AddParticipation(APIView):
+    queryset = UserProfile.objects.all()
+    permission_classes = [IsCoordinator,]    
     def get(self,request,*args,**kwargs):
         try:
             event = Events.objects.get(eventCode=self.kwargs['slug'])
@@ -34,7 +53,6 @@ class AddParticipation(APIView):
             participation = Participations.objects.create(participant=user,event=event)
         except:
             participation = None
-        print('called')
         
         serialiser = ParticipationSerialiser(participation)
         return Response(serialiser.data)
@@ -45,9 +63,10 @@ class ParticipationView(generics.ListAPIView):
 
 class EventStats(generics.ListAPIView):
     serializer_class = ParticipationSerialiser
+    permission_classes = [IsCoordinator,]
     def get_queryset(self):
         try:
-            event = Events.objects.get(eventCode=self.kwargs['event'])
+            event = Events.objects.get(eventCode=self.kwargs['slug'])
         except:
             event = None
         participations = Participations.objects.filter(event=event)

@@ -25,7 +25,7 @@ SECRET_KEY = '4&^r75_$u4l0wx=)f09awpuxth5f41^%+_#8%u!lkc_024o!w3'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*', 'localhost']
 
 
 # Application definition
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'events',
     'rest_framework',
     'phonenumber_field',
+    'corsheaders',
     'rest_framework.authtoken'
 ]
 
@@ -51,9 +52,13 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'valliantPro.urls'
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = False
 
 TEMPLATES = [
     {
@@ -106,11 +111,11 @@ AUTH_PASSWORD_VALIDATORS = [
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.DjangoModelPermissions',
-        # 'rest_framework.permissions.IsAuthenticated'
+         'rest_framework.permissions.IsAuthenticated'
      ),
-    # 'DEFAULT_AUTHENTICATION_CLASSES':(
-    #     'rest_framework.authentication.TokenAuthentication',
-    # )
+     'DEFAULT_AUTHENTICATION_CLASSES':(
+         'rest_framework.authentication.TokenAuthentication',
+     )
 }
 
 # Internationalization
